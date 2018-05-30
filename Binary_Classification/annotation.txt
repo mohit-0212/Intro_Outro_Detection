@@ -1,0 +1,55 @@
+young sheldon,00:02:54,00:03:11,00:18:28,end
+westworld,00:00:00,00:01:38,00:57:22,end
+timeless,00:09:17,00:09:21,00:42:02,end
+the wire,00:02:42,00:04:14,00:57:14,end
+the office,00:02:07,00:02:38,00:21:26,end
+the good fight,00:00:00,00:01:44,00:53:01,end
+the expanse,00:06:22,00:06:31,00:42:33,end
+the americans,00:07:32,00:07:57,00:46,50,end
+the 100,00:03:26,00:03:57,00:41:42,end
+supergirl,00:02:14,00:02:19,00:41:47,end
+silicon valley,00:01:21,00:01:30,00:27:32,end
+swat,00:06:24,00:06:57,00:42:35,end
+rick and morty,00:01:02,00:01:33,00:22:10,00:22:40
+real time with bill maher,00:00:00,00:00:22,00:55:11,end
+ncis,00:01:15,00:01:44,00:42:53,end
+masterchef australia,00:01:12,00:02:01,00:56:58,end
+madam secretary,00:12:30,00:12:39,00:42:43,end
+lucifer,00:06:36,00:06:50,00:43:49,end
+lost in space,00:00:00,00:00:10,00:45:03,end
+lethal weapon,00:09:05,00:09:10,00:43:10,end
+last week tonight with john oliver,00:00:00,00:00:24,00:29,06,end
+krypton,00:02:13,00:02:28,00:42:36,end
+into the badlands,00:05:48,00:06:25,00:42:42,end
+homeland,00:01:40,00:03:15,00:53:48,end
+hawaii five-o,00:04:07,00:04:37,00:43:18,end
+greys anatomy,00:07:51,00:07:58,00:40:56,end
+fear the walking dead,00:05:59,00:06:14,01:26:12,end
+family guy,00:00:00,00:00:29,00:21:25,end
+designated survivor,00:08:21,00:08:30,00:40:58,end
+deception,00:01:31,00:01:40,00:41:46,end
+brooklyn nine-nine,00:00:54,00:01:13,00:21:22,end
+billions,00:00:51,00:01:10,00:54:53,end
+bering sea gold,00:01:08,00:01:16,00:41:49,end
+barry,00:02:58,00:03:03,00:29:34,end
+ancient aliens,00:00:51,00:01:13,00:41:53,end
+the big bang theory,00:02:23,00:02:43,00:19:06,end
+the simpsons,00:00:00,00:01:16,00:20:29,end
+the handmaids tale,00:00:36,00:00:47,00:48:21,end
+the flash,00:04:20,00:04:22,00:41:59,end
+the blacklist,00:02:20,00:02:27,00:42:19,end
+supernatural,00:02:25,00:02:31,00:41:33,end
+saturday night live,00:05:01,00:06:42,01:06:02,end
+once upon a time,00:01:58,00:02:08,00:41:43,end
+ncis los angeles,00:01:06,00:01:26,00:41:55,end
+modern family,00:03:03,00:03:14,00:20:59,end
+marvels agents of shield,00:02:40,00:02:44,00:42:16,end
+gotham,00:04:30,00:04:36,00:41:52,end
+game of thrones,00:00:00,00:01:53,00:56:58,end
+chicago fire,00:03:31,00:03:36,00:41:21,end
+bobs burgers,00:00:00,00:00:19,00:20:54,end
+blue bloods,00:05:47,00:06:10,00:40:14,end
+blindspot,00:08:31,00:08:43,00:42:07,end
+arrow,00:02:52,00:02:56,00:41:55,end
+friends,00:01:12,00:01:46,00:23:15,end
+tom and jerry,00:00:00,00:00:20,00:07:02,end
