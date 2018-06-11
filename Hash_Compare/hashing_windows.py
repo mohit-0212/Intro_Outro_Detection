@@ -76,7 +76,7 @@ def get_scene_images(path):
 	file.close()
 	times = get_timings(out)
 	# print len(times)
-	# print times
+	# print (times)
 	# times = [float(i) for i in times]
 
 	os.remove("./scenes")
@@ -133,23 +133,31 @@ def get_time_string(tsecs):
 
 def main():
 	# t1 = time()
-	print "1"
+	print ("1")
 	l1, l2 = get_hash_video("./himym_1.mp4")
 	# t2 = time()
-	# print len(l1), len(l2)
-	# print t2-t1
-	print "2"
+	# print (len(l1), len(l2))
+	# print (t2-t1)
+	print ("2")
 	l3, l4 = get_hash_video("./himym 2.mp4")
 	# t3 = time()
-	# print len(l3), len(l4)
-	# print t3-t2
+	# print (len(l3), len(l4))
+	# print (t3-t2)
 
 	subarray, indices = longest_common_subarray(l1, l3)
 	for i in indices:
-		print l4[i]
+		print (l4[i])
+
+	print ("Last")
+
+	try:
+		end = indices[-1] + 1
+		print (l4[end])
+	except:
+		pass
 		
 	# indices = common_elements(l1, l3)
 	# for i in indices:
-	# 	print l4[i[0]], "sec", l2[i[1]]
+	# 	print (l4[i[0]], "sec", l2[i[1]])
 
 main()
