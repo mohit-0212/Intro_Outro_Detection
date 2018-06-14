@@ -89,15 +89,15 @@ def get_hash_from_dir(path):
 	hashlist = []
 	for i,img in enumerate(images):
 		hashlist.append(get_hash(path + img))
-	return hashlist
+	return hashlist, images
 
 
 def get_hash_video(path):
 	scene_change = get_scene_images(path)
 	name = path.split("/")[-1].split(".")[0]
 	dire_name = "./" + name + "/"
-	hashlist = get_hash_from_dir(dire_name)
-	return hashlist, scene_change
+	hashlist, images = get_hash_from_dir(dire_name)
+	return hashlist, images, scene_change
 
 def longest_common_subarray(l1, l2):
 	subarray = []
@@ -134,30 +134,30 @@ def get_time_string(tsecs):
 def main():
 	# t1 = time()
 	print ("1")
-	l1, l2 = get_hash_video("./himym_1.mp4")
+	h_1, i_1, s_1 = get_hash_video("./onepiece1.mp4")
 	# t2 = time()
 	# print (len(l1), len(l2))
 	# print (t2-t1)
 	print ("2")
-	l3, l4 = get_hash_video("./himym 2.mp4")
+	h_2, i_2, s_2 = get_hash_video("./onepiece2.mp4")
 	# t3 = time()
 	# print (len(l3), len(l4))
 	# print (t3-t2)
-
-	subarray, indices = longest_common_subarray(l1, l3)
+	print("\nLongest Continuous Match:")
+	subarray, indices = longest_common_subarray(h_1, h_2)
 	for i in indices:
-		print (l4[i])
+		print ("Time:", s_2[i], " Image Name:", i_2[i])
 
-	print ("Last")
-
+	print ("n+1 time after Longest Continuous")
 	try:
 		end = indices[-1] + 1
-		print (l4[end])
+		print (s_2[end])
 	except:
 		pass
 		
-	# indices = common_elements(l1, l3)
-	# for i in indices:
-	# 	print (l4[i[0]], "sec", l2[i[1]])
+	print("\nAll the Matches:")
+	indices = common_elements(h_1, h_2)
+	for i in indices:
+		print (i_1[i[1]], s_1[i[1]], ",", i_2[i[0]], s_2[i[0]])
 
 main()
