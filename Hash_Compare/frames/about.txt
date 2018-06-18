@@ -1,0 +1,1 @@
+This directory contains the output of the frames generated at the scene transition points.
