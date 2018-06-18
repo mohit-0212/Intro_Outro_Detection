@@ -60,14 +60,15 @@ def get_scene_images(path):
 	end_time = 360 #in seconds
 
 	name = path.split("/")[-1].split(".")[0]
-	# print (name)
+	# name = "frames/" + name
+	print (name)
 
-	if not os.path.exists("./" + name +"/"):
-		os.mkdir(name)
+	if not os.path.exists("./frames/" + name +"/"):
+		os.mkdir("frames/" + name)
 
 	input_file = path
 
-	scenes = "ffmpeg -i " + '"' + input_file + '"' + " -ss 0 -to " + str(end_time) + ' -vf  "select=' + "'gt(scene," + str(threshold) + ")'," + 'showinfo" -vsync vfr "./' + name + '/' + name + '"%04d.jpg>scenes 2>&1'
+	scenes = "ffmpeg -i " + '"' + input_file + '"' + " -ss 0 -to " + str(end_time) + ' -vf  "select=' + "'gt(scene," + str(threshold) + ")'," + 'showinfo" -vsync vfr "./frames/' + name + '/' + name + '"%04d.jpg>scenes 2>&1'
 	# print (scenes)
 	subprocess.call(scenes, shell = True)
 
@@ -95,7 +96,7 @@ def get_hash_from_dir(path):
 def get_hash_video(path):
 	scene_change = get_scene_images(path)
 	name = path.split("/")[-1].split(".")[0]
-	dire_name = "./" + name + "/"
+	dire_name = "./frames/" + name + "/"
 	hashlist, images = get_hash_from_dir(dire_name)
 	return hashlist, images, scene_change
 
@@ -132,14 +133,28 @@ def get_time_string(tsecs):
 
 
 def main():
+	vid = "./videos/"
+	all_vid = os.listdir(vid)
+	all_vid.sort()
+	try:
+		ind = all_vid.index("about.txt")
+		del all_vid[ind]
+	except:
+		pass
+
+	#assuming only 2 videos in the directory
+	vid_1 = vid + all_vid[0]
+	print(vid_1)
+	vid_2 = vid + all_vid[1]
+	
 	# t1 = time()
 	print ("1")
-	h_1, i_1, s_1 = get_hash_video("./onepiece1.mp4")
+	h_1, i_1, s_1 = get_hash_video(vid_1)
 	# t2 = time()
 	# print (len(l1), len(l2))
 	# print (t2-t1)
 	print ("2")
-	h_2, i_2, s_2 = get_hash_video("./onepiece2.mp4")
+	h_2, i_2, s_2 = get_hash_video(vid_2)
 	# t3 = time()
 	# print (len(l3), len(l4))
 	# print (t3-t2)
@@ -151,7 +166,7 @@ def main():
 	print ("n+1 time after Longest Continuous")
 	try:
 		end = indices[-1] + 1
-		print (s_2[end])
+		print ("Time:", s_2[end], " Image Name:", i_2[i])
 	except:
 		pass
 		
