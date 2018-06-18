@@ -4,7 +4,7 @@ from PIL import Image
 from time import time
 import subprocess
 import os
-
+import shutil
 
 # def get_hashList(path):
 # 	hashList = []
@@ -63,8 +63,9 @@ def get_scene_images(path):
 	# name = "frames/" + name
 	print (name)
 
-	if not os.path.exists("./frames/" + name +"/"):
-		os.mkdir("frames/" + name)
+	if os.path.exists("./frames/" + name +"/"):
+		shutil.rmtree("./frames/" + name)
+	os.mkdir("frames/" + name)
 
 	input_file = path
 
