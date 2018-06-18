@@ -144,7 +144,7 @@ def main():
 
 	#assuming only 2 videos in the directory
 	vid_1 = vid + all_vid[0]
-	print(vid_1)
+	# print(vid_1)
 	vid_2 = vid + all_vid[1]
 	
 	# t1 = time()
