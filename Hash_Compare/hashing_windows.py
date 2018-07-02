@@ -167,7 +167,7 @@ def main():
 	print ("n+1 time after Longest Continuous")
 	try:
 		end = indices[-1] + 1
-		print ("Time:", s_2[end], " Image Name:", i_2[i])
+		print ("Time:", s_2[end], " Image Name:", i_2[end])
 	except:
 		pass
 		
@@ -175,5 +175,6 @@ def main():
 	indices = common_elements(h_1, h_2)
 	for i in indices:
 		print (i_1[i[1]], s_1[i[1]], ",", i_2[i[0]], s_2[i[0]])
+	
 
 main()
