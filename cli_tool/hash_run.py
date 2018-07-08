@@ -37,9 +37,24 @@ def get_timings(out):
 	del times[-1]
 	return times
 
-def get_scene_transitions(path, threshold):
+def get_duration(out):
+	to_find = "Duration: "
+	length = len(to_find)
+	loc = out.find(to_find, 0)
+	duration = ""
+	current = loc + length
+	while out[current]!=",":
+		duration+=out[current]
+		current+=1
+	# to_sec = 0.0
+	total = duration.split(":")
+	to_sec = float(total[0])*3600.0 + float(total[1])*60.0 + float(total[1])
+	return to_sec
+
+def get_scene_transitions(path, threshold, category):
 	th = threshold
 	end_time = 360 #in seconds (can be put in arguments as well)
+	outro_end_time = -300 #in seconds from end of video (can be put in arguments as well)
 
 	name, ext = os.path.splitext(path)
 	# print (name)
@@ -50,8 +65,14 @@ def get_scene_transitions(path, threshold):
 
 	input_file = path
 
-	scenes = "ffmpeg -i " + '"' + input_file + '"' + " -ss 0 -to " + str(end_time) + ' -vf  "select=' + "'gt(scene," + str(th) + ")'," + 'showinfo" -vsync vfr "' + name + '/' + '"%04d.jpg>scenes 2>&1'
-	# print (scenes)
+	if category is "intro":
+		scenes = "ffmpeg -i " + '"' + input_file + '"' + " -ss 0 -to " + str(end_time) + ' -vf  "select=' + "'gt(scene," + str(th) + ")'," + 'showinfo" -vsync vfr "' + name + '/' + '"%04d.jpg>scenes 2>&1'
+	elif category is "outro":
+		# print(end_time)
+		scenes = "ffmpeg -sseof " + str(outro_end_time) + " -i " + '"' + input_file + '"' + ' -vf  "select=' + "'gt(scene," + str(th) + ")'," + 'showinfo" -vsync vfr "' + name + '/' + '"%04d.jpg>scenes 2>&1'
+		# scenes = "ffmpeg -i " + '"' + input_file + '"' + " -ss " + str(end_time) + " -to " + str(total_time) + ' -vf  "select=' + "'gt(scene," + str(th) + ")'," + 'showinfo" -vsync vfr "' + name + '/' + '"%04d.jpg>scenes 2>&1'
+		# print(scenes)
+
 	subprocess.call(scenes, shell = True)
 
 	file = open("scenes", "r")
@@ -62,8 +83,20 @@ def get_scene_transitions(path, threshold):
 
 	return times
 
-def get_hash_video(path, threshold):
-	scene_transitions = get_scene_transitions(path, threshold)
+def get_hash_video(path, threshold, category):
+	scene_transitions = get_scene_transitions(path, threshold, category)
+	if category=="outro":
+		duration = "ffmpeg -i " + '"' + path + '"' + ">duration 2>&1"
+		subprocess.call(duration, shell = True)
+		file = open("duration", "r")
+		out = file.read()
+		file.close()
+		total_time = get_duration(out)
+		os.remove("./duration")
+		outro_end_time = -300
+		begin = total_time + outro_end_time
+		for i in range(len(scene_transitions)):
+			scene_transitions[i] = str(float(scene_transitions[i]) + begin)
 	name, ext = os.path.splitext(path)
 	hashlist, images = get_hash_from_dir(name)
 	if os.path.exists(name):
@@ -84,6 +117,22 @@ def common_elements(list1, list2):
 			common.append((i, ind))
 		except:
 			pass
+	return common
+
+#small modification for outros
+def common_elements_outro(list1, list2):
+	common = []
+	for i, element1 in enumerate(list1):
+		# if element in list2:
+			# common.append(element)
+		for j, element2 in enumerate(list2):
+			if (element1-element2)<=5:
+				if len(common)!=0 and common[-1][1]<j:
+					common.append((i, j))
+					break
+				elif len(common)==0:
+					common.append((i, j))
+					break	
 	return common
 
 #(2) Longest continuos match
@@ -111,10 +160,14 @@ def longest_common_subarray(l1, l2):
 
 def gen_timings_processed(videos_process, threshold, method):
 	intro_times = []
-	hash_prev, scene_prev = get_hash_video(videos_process[0], threshold)
-	print(0)
+	outro_times = []
+
+	#Processing for Iintros
+	hash_prev, scene_prev = get_hash_video(videos_process[0], threshold, "intro")
+	
+	print(0, "Intro")
 	for i in range(1, len(videos_process)):
-		hash_cur, scene_cur = get_hash_video(videos_process[i], threshold)
+		hash_cur, scene_cur = get_hash_video(videos_process[i], threshold, "intro")
 		if method == "all_match":
 			indices = common_elements(hash_prev, hash_cur)
 			
@@ -149,18 +202,52 @@ def gen_timings_processed(videos_process, threshold, method):
 		hash_prev = hash_cur
 		scene_prev = scene_cur
 		
-		print(i)
+		print(i, "Intro")
 
-	return intro_times
+	#Processing for Outros
+	hash_prev, scene_prev = get_hash_video(videos_process[0], threshold, "outro")
+	print(0, "Outro")
+	
+	for i in range(1, len(videos_process)):
+		hash_cur, scene_cur = get_hash_video(videos_process[i], threshold, "outro")
+		indices = common_elements_outro(hash_prev, hash_cur)
+		# print(indices)			
+		outro_start_prev = scene_prev[indices[0][0]]
+		outro_start_cur = scene_cur[indices[0][1]]
+		
+		try:
+			outro_end_prev = scene_prev[indices[-1][0] + 1]
+		except:
+			outro_end_prev = scene_prev[indices[-1][0]]
+
+		try:
+			outro_end_cur = scene_cur[indices[-1][1] + 1]
+		except:
+			outro_end_cur = scene_cur[indices[-1][1]]
+
+		if len(outro_times)==0:
+			time_string = str(outro_start_prev) + " " + str(outro_end_prev) + " 0" #cut in edl files
+			outro_times.append(time_string)
+
+		time_string = str(outro_start_cur) + " " + str(outro_end_cur) + " 0" #cut in edl files
+		outro_times.append(time_string)
+
+		hash_prev = hash_cur
+		scene_prev = scene_cur
+
+		print(i, "Outro")
 
 
-def create_edl(videos, timings):
+	return intro_times, outro_times
+
+
+def create_edl(videos, intro_timings, outro_timings):
 	for i,file in enumerate(videos):
 		filename, file_extension = os.path.splitext(file)
 		suffix = '.edl'
 		edl_file = filename + suffix
 		f = open(edl_file, "w")
-		f.write(timings[i])
+		f.write(intro_timings[i] + "\n" + outro_timings[i])
 		f.close()
 
 
@@ -191,19 +278,22 @@ def generate(path, threshold, method, force):
 		videos_process = copy.deepcopy(videos)
 	# print(videos_process)
 
-	if len(videos_process)==1:
+	if len(videos_process)==0:
+		print("No videos to process.")
+		exit()
+	elif len(videos_process)==1:
 		vid = videos_process[0]
 		videos.sort() #basic ordering for videos by sorting based on season and episode
 		try:
 			comp_vid = videos[videos.index(vid) - 1]
 		except:
 			comp_vid = videos[videos.index(vid) + 1]
-		intro_times = gen_timings_processed([comp_vid, vid], threshold, method)
-		create_edl([vid], [intro_times[1]])
+		intro_times, outro_times = gen_timings_processed([comp_vid, vid], threshold, method)
+		create_edl([vid], [intro_times[1]], [outro_times[1]])
 	else:
 		videos_process.sort() #basic ordering for videos by sorting based on season and episode
-		intro_times = gen_timings_processed(videos_process, threshold, method)
-		create_edl(videos_process, intro_times)
+		intro_times, outro_times = gen_timings_processed(videos_process, threshold, method)
+		create_edl(videos_process, intro_times, outro_times)
 
 	print("Timing files created.")
 
