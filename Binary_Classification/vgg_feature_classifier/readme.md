@@ -17,7 +17,7 @@ Experiment-
 5) Feed these feature vectors into the SVM classifier to get the outputs and compare them with the ground truth labels for accuracy.
 
 Possible Hyperparameters-
-1) SVM parameters like C (regularization)
+1) SVM parameters like C, gamma (regularization)
 
 Results-
 1) An accuracy of ~87% obtained on the testing frames.
